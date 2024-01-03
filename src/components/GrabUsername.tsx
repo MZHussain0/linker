@@ -15,7 +15,10 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { ArrowRightIcon } from "lucide-react";
+import { ArrowRightIcon, CircleIcon } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import UsernameFormResult from "./UsernameFormResult";
 import grabUsername from "./actions/grabUsername";
 
 type Props = {
@@ -28,12 +31,28 @@ const formSchema = z.object({
   }),
 });
 const GrabUsername = ({ desiredUsername }: Props) => {
+  const [taken, setTaken] = useState(false);
+
+  const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      username: desiredUsername || "",
+      username: desiredUsername,
     },
   });
+
+  const { isSubmitting } = form.formState;
+
+  const handleSubmit = async () => {
+    const result = await grabUsername({
+      desiredUsername: form.getValues("username"),
+    });
+
+    setTaken(result === false);
+    if (result) {
+      router.push(`/account?created=${form.getValues("username")}`);
+    }
+  };
 
   return (
     <>
@@ -41,9 +60,7 @@ const GrabUsername = ({ desiredUsername }: Props) => {
         Grab your username
       </h1>
       <Form {...form}>
-        <form
-          action={(formData: FormData) => grabUsername({ desiredUsername })}
-          className="space-y-8">
+        <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-8">
           <FormField
             control={form.control}
             name="username"
@@ -57,15 +74,28 @@ const GrabUsername = ({ desiredUsername }: Props) => {
                   This is your public display username.
                 </FormDescription>
                 <FormMessage />
+                {taken && <UsernameFormResult />}
               </FormItem>
             )}
           />
-          <div className="text-destructive">Username already taken.</div>
+
           <Button
             type="submit"
-            className="bg-theme-300 text-lg hover:bg-theme-400 w-full">
-            Claim your username
-            <ArrowRightIcon className="ml-2 h-6 w-6 animate-pulse text-red-800" />
+            className="bg-theme-300 text-lg hover:bg-theme-400 w-full"
+            disabled={isSubmitting}>
+            {isSubmitting ? (
+              <div className="flex items-center justify-center">
+                <div className="animate-spin mr-2">
+                  <CircleIcon className="h-4 w-4 text-red-800" />
+                </div>
+                <span>Loading...</span>
+              </div>
+            ) : (
+              <>
+                Claim your username
+                <ArrowRightIcon className="ml-2 h-6 w-6 animate-pulse text-red-800" />
+              </>
+            )}
           </Button>
         </form>
       </Form>

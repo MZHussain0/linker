@@ -1,4 +1,5 @@
 ﻿import GrabUsername from "@/components/GrabUsername";
+import { Page } from "@/models/page";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import { authOptions } from "../api/auth/[...nextauth]/route";
@@ -10,12 +11,20 @@ type Props = {
 const AccountPage = async ({ searchParams }: Props) => {
   const session = await getServerSession(authOptions);
   if (!session) {
-    redirect("/");
+    return redirect("/");
   }
+
+  const page = await Page.findOne({ owner: session.user?.email });
+
+  if (page) {
+    return <div className="max-w-4xl mx-auto">Your page is: /{page.uri}</div>;
+  }
+
+  const { name } = session.user || {};
   return (
     <div className="max-w-4xl mx-auto">
-      <div className="p-4 ">
-        Account: {session.user?.name} <br />
+      <div className="p-4">
+        Account: {name} <br />
         DesiredUsername = {searchParams.username}
       </div>
 

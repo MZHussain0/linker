@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { signIn } from "next-auth/react";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
 const formSchema = z.object({
@@ -25,14 +25,21 @@ const formSchema = z.object({
   }),
 });
 
-export function HeroForm() {
+type Props = {
+  user?: string | null;
+};
+
+export function HeroForm({ user }: Props) {
+  const router = useRouter();
+
   useEffect(() => {
     if ("localStorage" in window && window.localStorage.getItem("username")) {
       const username = window.localStorage.getItem("username");
       window.localStorage.removeItem("username");
-      redirect(`/account?username=${username}`);
+      router.push(`/account?username=${username}`);
     }
-  });
+  }, [router]);
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -42,8 +49,12 @@ export function HeroForm() {
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     const username = values.username;
-    window.localStorage.setItem("username", username);
-    await signIn("google");
+    if (user) {
+      router.push(`/account?username=${username}`);
+    } else {
+      window.localStorage.setItem("username", username);
+      await signIn("google");
+    }
   }
 
   return (
