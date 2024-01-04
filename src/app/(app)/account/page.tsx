@@ -1,8 +1,9 @@
 ﻿import GrabUsername from "@/components/GrabUsername";
 import { Page } from "@/models/page";
+import mongoose from "mongoose";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
-import { authOptions } from "../api/auth/[...nextauth]/route";
+import { authOptions } from "../../api/auth/[...nextauth]/route";
 
 type Props = {
   searchParams: { username: string };
@@ -14,6 +15,7 @@ const AccountPage = async ({ searchParams }: Props) => {
     return redirect("/");
   }
 
+  mongoose.connect(process.env.MONGODB_URI as string);
   const page = await Page.findOne({ owner: session.user?.email });
 
   if (page) {
