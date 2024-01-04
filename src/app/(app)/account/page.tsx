@@ -1,4 +1,6 @@
 ﻿import GrabUsername from "@/components/GrabUsername";
+
+import { PageSettingsForm } from "@/components/PageSettingsForm";
 import { Page } from "@/models/page";
 import mongoose from "mongoose";
 import { getServerSession } from "next-auth";
@@ -19,7 +21,7 @@ const AccountPage = async ({ searchParams }: Props) => {
   const page = await Page.findOne({ owner: session.user?.email });
 
   if (page) {
-    return <div className="max-w-4xl mx-auto">Your page is: /{page.uri}</div>;
+    return <PageSettingsForm page={page.uri} image={session.user?.image} />;
   }
 
   const { name } = session.user || {};

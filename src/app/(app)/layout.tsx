@@ -1,7 +1,6 @@
 ﻿import AppSidebar from "@/components/AppSidebar";
 import ClientOnly from "@/components/ClientOnly";
 import { getServerSession } from "next-auth";
-import { headers } from "next/headers";
 import Image from "next/image";
 import { redirect } from "next/navigation";
 import React from "react";
@@ -17,8 +16,6 @@ const Accountlayout = async ({ children }: Props) => {
   if (!session) {
     return redirect("/");
   }
-
-  const headerList = headers();
 
   return (
     <ClientOnly>
@@ -37,9 +34,7 @@ const Accountlayout = async ({ children }: Props) => {
           <AppSidebar />
         </aside>
 
-        <div className=" grow bg-theme-600 m-8 p-4 shadow-md shadow-white">
-          {children}
-        </div>
+        <div className=" grow p-4">{children}</div>
       </main>
     </ClientOnly>
   );
