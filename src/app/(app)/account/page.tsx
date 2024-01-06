@@ -1,5 +1,6 @@
 ﻿import GrabUsername from "@/components/GrabUsername";
 
+import { PageButtonsForm } from "@/components/PageButtonsForm";
 import { PageSettingsForm } from "@/components/PageSettingsForm";
 import { Page } from "@/models/Page";
 import { User } from "@/models/User";
@@ -24,13 +25,16 @@ const AccountPage = async ({ searchParams }: Props) => {
 
   if (page) {
     return (
-      <PageSettingsForm
-        uri={page.uri}
-        displayName={page.displayName}
-        bio={page.bio}
-        location={page.location}
-        image={user?.src || session.user?.image}
-      />
+      <>
+        <PageSettingsForm
+          uri={page.uri}
+          displayName={page.displayName}
+          bio={page.bio}
+          location={page.location}
+          image={user?.src || session.user?.image}
+        />
+        <PageButtonsForm buttons={page.buttons} />
+      </>
     );
   }
 

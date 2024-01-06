@@ -31,3 +31,16 @@ export async function savePageSettings(
   }
   return false;
 }
+
+export async function savePageButtons(formData: any) {
+  mongoose.connect(process.env.MONGODB_URI as string);
+
+  const session = await getServerSession(authOptions);
+
+  if (session) {
+    await Page.updateOne(
+      { owner: session?.user?.email },
+      { buttons: formData }
+    );
+  }
+}
