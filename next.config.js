@@ -5,6 +5,9 @@ const nextConfig = {
       {
         hostname: "*.googleusercontent.com",
       },
+      {
+        hostname: "res.cloudinary.com",
+      },
     ],
   },
 };

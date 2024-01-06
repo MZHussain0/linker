@@ -21,7 +21,15 @@ const AccountPage = async ({ searchParams }: Props) => {
   const page = await Page.findOne({ owner: session.user?.email });
 
   if (page) {
-    return <PageSettingsForm page={page.uri} image={session.user?.image} />;
+    return (
+      <PageSettingsForm
+        uri={page.uri}
+        displayName={page.displayName}
+        bio={page.bio}
+        location={page.location}
+        image={session.user?.image}
+      />
+    );
   }
 
   const { name } = session.user || {};

@@ -2,6 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import * as z from "zod";
 
 import { Button } from "@/components/ui/button";
@@ -14,59 +15,75 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { ImageIcon, PaletteIcon, UploadCloudIcon } from "lucide-react";
-import Image from "next/image";
+import { UploadCloudIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { RadioGroup, RadioGroupItem } from "./ui/radio-group";
+import ImageUpload from "./ImageUpload";
+import { savePageSettings } from "./actions/pageActions";
 import { Textarea } from "./ui/textarea";
 
 const formSchema = z.object({
   name: z.string().min(5, {
     message: "Name must be at least 5 characters.",
   }),
-  type: z.enum(["color", "image"], {
-    required_error: "You need to select a notification type.",
-  }),
-  location: z.string().min(1, {
-    message: "Location must be at least 1 characters.",
-  }),
-  bio: z.string().min(5, {
-    message: "Bio must be at least 5 characters.",
-  }),
+  // type: z.enum(["color", "image"]),
+  location: z.string(),
+  bio: z.string(),
+  src: z.string(),
 });
 
 type Props = {
-  page: string;
+  uri: string;
+  displayName: string;
+  bio: string;
+  location: string;
   image?: string | null;
 };
 
-export function PageSettingsForm({ page, image }: Props) {
+export function PageSettingsForm({
+  bio,
+  image,
+  location,
+  uri,
+  displayName,
+}: Props) {
   const router = useRouter();
-  const [selectedValue, setSelectedValue] = useState("color");
+  // const [selectedValue, setSelectedValue] = useState("color");
 
-  const handleLabelClick = (value: string) => {
-    setSelectedValue((prev) => (prev === value ? prev : value));
-  };
+  // const handleLabelClick = (value: string) => {
+  //   setSelectedValue((prev) => (prev === value ? prev : value));
+  // };
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: "",
-      type: "color",
-      location: "",
-      bio: "",
+      name: displayName,
+      // type: "color",
+      location: location,
+      bio: bio,
+      src: image || "",
     },
   });
 
+  const { isSubmitting } = form.formState;
+
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
+    const result = await savePageSettings(
+      values.name,
+      values.bio,
+      values.location,
+      values.src
+    );
+    if (result) {
+      toast.success("Updated the record successfully!");
+    } else {
+      toast.error("Something went wrong!");
+    }
   }
 
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-        <FormField
+        {/* <FormField
           control={form.control}
           name="type"
           render={({ field }) => (
@@ -118,18 +135,26 @@ export function PageSettingsForm({ page, image }: Props) {
               <FormMessage />
             </FormItem>
           )}
-        />
+        /> */}
 
         {/* Image component */}
-        <div className="flex justify-center">
-          <Image
-            src={image || ""}
-            width={256}
-            height={256}
-            alt="avatar"
-            className="rounded-full overflow-hidden mx-auto w-32 aspect-square border-4 border-white relative -top-12"
-          />
-        </div>
+
+        <FormField
+          name="src"
+          render={({ field }) => (
+            <FormItem className="flex  items-center justify-center pt-16 max-w-md mx-auto">
+              <FormControl>
+                <ImageUpload
+                  disabled={isSubmitting}
+                  onChange={field.onChange}
+                  value={field.value}
+                  image={image || ""}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
         {/* Name Field */}
         <FormField
@@ -181,6 +206,7 @@ export function PageSettingsForm({ page, image }: Props) {
         />
         <Button
           type="submit"
+          disabled={isSubmitting}
           className="bg-theme-300 hover:bg-theme-400 w-52 text-lg font-semibold flex items-center justify-center">
           <span>Save</span>
           <UploadCloudIcon className="h-5 w-5 ml-2 " />
