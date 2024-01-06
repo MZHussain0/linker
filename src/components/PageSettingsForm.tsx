@@ -28,7 +28,7 @@ const formSchema = z.object({
   // type: z.enum(["color", "image"]),
   location: z.string(),
   bio: z.string(),
-  src: z.string(),
+  image: z.string(),
 });
 
 type Props = {
@@ -60,7 +60,7 @@ export function PageSettingsForm({
       // type: "color",
       location: location,
       bio: bio,
-      src: image || "",
+      image: image !== null ? image : undefined,
     },
   });
 
@@ -71,7 +71,7 @@ export function PageSettingsForm({
       values.name,
       values.bio,
       values.location,
-      values.src
+      values.image
     );
     if (result) {
       toast.success("Updated the record successfully!");
@@ -140,7 +140,7 @@ export function PageSettingsForm({
         {/* Image component */}
 
         <FormField
-          name="src"
+          name="image"
           render={({ field }) => (
             <FormItem className="flex  items-center justify-center pt-16 max-w-md mx-auto">
               <FormControl>

@@ -1,7 +1,8 @@
 ﻿import GrabUsername from "@/components/GrabUsername";
 
 import { PageSettingsForm } from "@/components/PageSettingsForm";
-import { Page } from "@/models/page";
+import { Page } from "@/models/Page";
+import { User } from "@/models/User";
 import mongoose from "mongoose";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
@@ -19,6 +20,7 @@ const AccountPage = async ({ searchParams }: Props) => {
 
   mongoose.connect(process.env.MONGODB_URI as string);
   const page = await Page.findOne({ owner: session.user?.email });
+  const user = await User.findOne({ email: session.user?.email });
 
   if (page) {
     return (
@@ -27,7 +29,7 @@ const AccountPage = async ({ searchParams }: Props) => {
         displayName={page.displayName}
         bio={page.bio}
         location={page.location}
-        image={session.user?.image}
+        image={user?.src || session.user?.image}
       />
     );
   }

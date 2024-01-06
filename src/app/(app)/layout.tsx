@@ -20,14 +20,13 @@ const Accountlayout = async ({ children }: Props) => {
   return (
     <ClientOnly>
       <main className="flex items-start">
-        <aside className="bg-theme-800 w-48 min-h-screen p-4 border-r shadow-sm">
-          <div className=" rounded-full overflow-hidden mx-auto w-24 aspect-square">
+        <aside className="bg-theme-800 w-48 min-h-screen p-4 border-r shadow-sm flex justify-start flex-col items-center">
+          <div className="relative h-24 w-24 border-white border-4 rounded-full">
             <Image
               src={session.user?.image || ""}
-              width={256}
-              height={256}
+              fill
               alt="avatar"
-              className="object-cover"
+              className="rounded-full object-cover"
             />
           </div>
 

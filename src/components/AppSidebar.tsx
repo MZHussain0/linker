@@ -10,7 +10,6 @@ type Props = {};
 const AppSidebar = (props: Props) => {
   const path = usePathname();
   const router = useRouter();
-  console.log(path);
 
   return (
     <nav className="flex flex-col text-white text-lg justify-center  mt-16 gap-4 font-semibold">
