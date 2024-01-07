@@ -155,8 +155,8 @@ export function PageButtonsForm({
   };
 
   return (
-    <div className="bg-muted p-4 mt-4 rounded-lg">
-      <form action={saveButtons}>
+    <div className="bg-muted-foreground p-1 mt-4 rounded-lg">
+      <form action={saveButtons} className="bg-muted rounded-lg p-4">
         <h3 className="text-lg font-semibold text-theme-300 mb-4">Buttons</h3>
 
         <ReactSortable list={activeButtons} setList={handleSortEnd}>

@@ -44,3 +44,13 @@ export async function savePageButtons(formData: any) {
     );
   }
 }
+
+export async function savePageLinks(formData: any) {
+  mongoose.connect(process.env.MONGODB_URI as string);
+
+  const session = await getServerSession(authOptions);
+
+  if (session) {
+    await Page.updateOne({ owner: session?.user?.email }, { links: formData });
+  }
+}

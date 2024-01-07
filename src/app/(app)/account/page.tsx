@@ -1,6 +1,7 @@
 ﻿import GrabUsername from "@/components/GrabUsername";
 
 import { PageButtonsForm } from "@/components/PageButtonsForm";
+import PageLinksForm from "@/components/PageLinksForm";
 import { PageSettingsForm } from "@/components/PageSettingsForm";
 import { Page } from "@/models/Page";
 import { User } from "@/models/User";
@@ -34,6 +35,7 @@ const AccountPage = async ({ searchParams }: Props) => {
           image={user?.src || session.user?.image}
         />
         <PageButtonsForm buttons={page.buttons} />
+        <PageLinksForm links={page.links} />
       </>
     );
   }
