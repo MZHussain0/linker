@@ -85,7 +85,7 @@ const PageLinksForm = ({ links }: Props) => {
     append({ linkId: nanoid(), linkTitle: "", linkSubtitle: "", linkUrl: "" });
   }
   return (
-    <div className="bg-muted-foreground p-1 mt-4 rounded-lg mx-auto">
+    <div className="bg-muted-foreground p-1 mt-16 rounded-lg mx-auto">
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}

@@ -88,7 +88,6 @@ export function PageButtonsForm({
 }: {
   buttons: { [key: string]: string };
 }) {
-  console.log(buttons);
   const [inputValues, setInputValues] = useState(buttons);
 
   const pageSavedButtonKeys = Object.keys(buttons);
@@ -155,7 +154,7 @@ export function PageButtonsForm({
   };
 
   return (
-    <div className="bg-muted-foreground p-1 mt-4 rounded-lg">
+    <div className="bg-muted-foreground p-1 mt-16 rounded-lg">
       <form action={saveButtons} className="bg-muted rounded-lg p-4">
         <h3 className="text-lg font-semibold text-theme-300 mb-4">Buttons</h3>
 

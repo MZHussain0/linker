@@ -12,7 +12,7 @@ const AppSidebar = (props: Props) => {
   const router = useRouter();
 
   return (
-    <nav className="flex flex-col text-white text-lg justify-center  mt-16 gap-4 font-semibold">
+    <nav className="flex flex-col text-white text-lg justify-center mt-8 gap-4 font-semibold">
       <Button
         variant={path === "/account" ? "secondary" : "ghost"}
         onClick={() => router.push("/account")}
@@ -36,11 +36,13 @@ const AppSidebar = (props: Props) => {
       <LogoutButton />
 
       <Button
-        className="flex items-center gap-2 border-t border-white mt-4 hover:bg-none"
+        className="flex items-center gap-2 border-t border-white mt-4 hover:bg-none hover:-translate-x-1 transition-all duration-300"
         variant={"link"}
         onClick={() => router.push("/")}>
-        <ArrowLeftToLineIcon className="text-theme-400 w-5 h-5" />
-        <span className="text-theme-50 text-base underline">Homepage</span>
+        <ArrowLeftToLineIcon className="text-theme-400 w-5 h-5 " />
+        <span className="text-theme-100 hover:text-theme-200  text-base underline">
+          Homepage
+        </span>
       </Button>
     </nav>
   );
