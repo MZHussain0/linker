@@ -1,4 +1,5 @@
-﻿import { Page } from "@/models/Page";
+﻿import { Event } from "@/models/Event";
+import { Page } from "@/models/Page";
 import { User } from "@/models/User";
 import {
   DiscIcon,
@@ -52,6 +53,7 @@ const UriPage = async ({ params }: Props) => {
   mongoose.connect(process.env.MONGODB_URI as string);
   const page = await Page.findOne({ uri: params.uri });
   const user = await User.findOne({ email: page?.owner });
+  await Event.create({ uri: params.uri, page: params.uri, type: "view" });
   return (
     <div className="max-w-4xl mx-auto mt-16 px-4 flex flex-col items-center justify-center">
       <div className="relative w-36 h-36">
@@ -98,6 +100,7 @@ const UriPage = async ({ params }: Props) => {
       <div className="max-w-2xl mx-auto grid md:grid-cols-2 gap-6 p-4 px-6 mt-4">
         {page?.links.map((link: any) => (
           <Link
+            ping={`/api/click?url=${btoa(link.linkUrl)}&page=${page.uri}`}
             href={link.linkUrl}
             target="_blank"
             key={link.id}

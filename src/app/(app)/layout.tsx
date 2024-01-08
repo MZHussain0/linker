@@ -1,7 +1,7 @@
 ﻿import AppSidebar from "@/components/AppSidebar";
 import ClientOnly from "@/components/ClientOnly";
 import { Page } from "@/models/Page";
-import { Link2Icon } from "lucide-react";
+import { Link2Icon, MenuIcon } from "lucide-react";
 import { getServerSession } from "next-auth";
 import Image from "next/image";
 import Link from "next/link";
@@ -24,8 +24,11 @@ const Accountlayout = async ({ children }: Props) => {
 
   return (
     <ClientOnly>
+      <div className="flex md:hidden bg-muted/20  p-4 sticky top-0 ">
+        <MenuIcon /> Menu
+      </div>
       <main className="flex items-stretch">
-        <div className="flex-none w-48 bg-muted/50 p-4 border-r shadow-sm">
+        <div className="flex-none w-48 bg-muted/50 p-4 border-r shadow-sm hidden md:block">
           <aside className=" flex justify-start flex-col items-center ">
             <div className="sticky top-0">
               <div className="relative h-24 w-24 mt-16 border-white border-4 rounded-full">
